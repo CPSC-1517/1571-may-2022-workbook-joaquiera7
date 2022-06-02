@@ -162,7 +162,7 @@ namespace OOPsReview
             Title = "Unknown";
         }
 
-        public Employment(string title, SupervisoryLevel level, double years)
+        public Employment(string title, SupervisoryLevel level, double years = 0.0)
         {
             //
 
@@ -171,12 +171,65 @@ namespace OOPsReview
             //  b) you COULD written your validation in this constructor 
             //  c) validation for public readonly data members MUST be done here 
             //  d) validation for properties with a private set MUST be done here
-            //      if not doen in the property
+            //      if not done in the property
+
+            //default parameters
+
+            //WHY? it allows the programmer to use your constructor/method without having to 
+            //  specify all arguments in their code to your constructor/method
+            
+            //Location: End of parameter list
+            //How many: as many as you wish
+            //values for your default parameters MUST be a valid value
+            //position and order of specified default parameters are important when the program
+            //  uses thge constructor/method.
+            //default parameters CAN be skipped, HOWEVER you still must account for the 
+            //  skipped parameter in your argument call list using commas
+            //by giving the default parameter an argument value on the call, the constructor/method
+            // default value is overridden
+
+            //syntax:   datatype parameterName = default value
+            //example:  years on this constructoris a default parameter
+
+            //example:  skipped defaults (3 default parameters, second one skipped
+            //      (string requiredparam, int requiredparam, int default1 = 0, int default2 = 0, int default3 = 1)
+            //
+            //call: ...("Required string", 25, 10, , 5) **default2 was skipped.
             Title = title;
             Level = level;
             Years = years;  //evetually the data will be placed in _Years
 
         }
 
+        //Behaviours (a.k.a methods)
+        //a behaviour is any method in your class
+        //behaviour can be
+        //  private (for use by the class only);
+        //  public (for use by the outside user)
+        //all rules about method are in effect
+
+        //a special method may be placed in your class to reflect the data stored by the
+        //  instance (object) based on this class definition
+        //this method is part of the system software and can be overridden by your own
+        //  version of the method
+
+        public override string ToString()
+        {
+            //this string is known as "comma seperate values (csv)" string
+            //this string uses the get; of the property
+            return $"{Title} {Level} {Years}";
+        }
+
+        public void SetEmploymentResponsibilityLevel(SupervisoryLevel level)
+        {
+            //this method, in this example would not be necessary as the access directly
+            //  the Level (property) is public ( set; )
+            //HOWEVER: IF the level property had a private set;, the outside user would NOT 
+            //  have direct access to chganging the property
+            //THEREFORE: a method (besides the constructor) would need to be supplied to allow
+            //  the outisde user the ability to alter the property value (if they so desired)
+            //
+            Level = level;
+        }
     }
 }
