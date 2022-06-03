@@ -227,7 +227,7 @@ namespace OOPsReview.Data
             return $"{Title}, {Level}, {Years}";
         }
 
-        public void SetEmployeeResponsibilityLevel(SupervisoryLevel level)
+        public void SetEmploymentResponsibilityLevel(SupervisoryLevel level)
         {
             //this method, in this example would not be necessary as the access directly to the 
             //  Level (property) is public ( set; )

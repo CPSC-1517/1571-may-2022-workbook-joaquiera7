@@ -87,6 +87,7 @@ namespace ReviewUnitTests
         }
         [TestMethod]
         [DataRow("Unit Test Designer",SupervisoryLevel.Owner,25.2)]
+
         public void Employment_ToStringDisplay_GoodDisplay(string title, SupervisoryLevel level, double years)
         {
             try
@@ -101,6 +102,20 @@ namespace ReviewUnitTests
             {
                 Assert.Fail($"Unexpected exception of type {ex.GetType()} caught {ex.Message}");
             }
+        }
+
+        [TestMethod]
+        [DataRow (SupervisoryLevel.Entry)]
+        public void Employment_SetSupervisoryLevel_GoodSet(SupervisoryLevel level)
+        {
+            //arrange   (setup of data)
+            Employment employment = new Employment("Boss", SupervisoryLevel.DepartmentHead, 3.5);
+
+            //act   (call the method for testing)
+            employment.SetEmploymentResponsibilityLevel(level);
+
+            //assess    (check to success)
+            Assert.IsTrue(employment.Level == level, $"Employment level of {employment.Level} is incorrect. Should be {level}.");
         }
     }
 }
