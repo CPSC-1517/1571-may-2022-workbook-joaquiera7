@@ -6,6 +6,7 @@
 
 //using the "using" statement means that one does NOT need to fully qualify on EACH usage of the class
 using OOPsReview.Data;
+using System.Text.Json;
 
 //a fully qualified reference to Employment
 //OOPsReview.Data.Employment myEmp = new OOPsReview.Data.Employment("Level 5 Programmer", SupervisoryLevel.Supervisor, 15.9);
@@ -81,6 +82,8 @@ if (Employment.TryParse(theRecord, out thePrasedRecord))
 //we will be using ReadAllLines(pathname); returns an array of strings; each 
 //  array element is one line in your csv file.
 const string PATHNAME = "../../../Employment.csv";
+const string JSONPATHNAME = "../../../Employment.json";
+
 List<Employment> jobs = ReadCSVFile(PATHNAME);
 Console.WriteLine($"\nResults of reading the csv file at: {PATHNAME}");
 foreach(Employment job in jobs)
@@ -88,8 +91,19 @@ foreach(Employment job in jobs)
     Console.WriteLine($"Title: {job.Title} Level: {job.Level} Year: {job.Years}");
 }
 //writing a JSON file
+//me is built above
+SaveAsJson(me, JSONPATHNAME);
 
 //read a JSON file
+Person jsonMe = ReadAsJson(JSONPATHNAME);
+Console.WriteLine("\nOutput from reading a json file.");
+Console.WriteLine($"{jsonMe.FirstName}, {jsonMe.LastName}, lives at {jsonMe.Address.ToString()}" +
+    $" having a job count of {jsonMe.NumberOfPositions}");
+Console.WriteLine("\nJobs: output via foreach loop\n");
+foreach (var item in jsonMe.EmploymentPositions)
+{
+    Console.WriteLine(item.ToString());
+}
 
 void CreateJob(ref Employment job)
 {
@@ -264,4 +278,56 @@ List<Employment> ReadCSVFile(string pathname)
         Console.WriteLine(ex.Message);
     }
     return employments;
+}
+
+//Write JSON
+void SaveAsJson(Person me, string pathname)
+{
+    //the term use to read and write Json files is Serialization
+    //the classes use are referred to as serializers
+    //with writing we can make the file produce more readable format
+    //  by using indentation
+    //JSON is very good at using objects and properties, however, it 
+    //  needs help/prompting to work better with fields: option IncludeFields
+    //the term Serialize is generally used to indicate writing
+    //instance instatiation
+    JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        IncludeFields = true
+    };
+
+    try
+    {
+        //Serialize the instance of Person
+        //produce a string of serialized data
+        string jsonstring = JsonSerializer.Serialize<Person>(me, options);
+        //output the hson string to your file indicated in the path
+        //user WriteAllText here because there is ONLY a SINGLE line of text
+        //  unlike writing a csv file which has an array of strings (WriteAllLines)
+        File.WriteAllText(pathname, jsonstring);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
+
+//Read JSON
+Person ReadAsJson(string pathname)
+{
+    Person person = null;
+    try
+    {
+        //bring in the text from the file
+        string jsonstring = File.ReadAllText(pathname);
+        //use the deserializer to unpack the json string into
+        //  the expected structure <Person>
+        person = JsonSerializer.Deserialize<Person>(jsonstring);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    return person;
 }

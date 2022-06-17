@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+#region Additional Namespaces
+using System.Text.Json.Serialization;
+#endregion
 namespace OOPsReview.Data
 {
     public class Person
@@ -59,6 +63,15 @@ namespace OOPsReview.Data
         //this field is NOT a property
         //the data type is a developer defined datatype (struct)
 
+        //JSON****
+        //Json Serialization has no problem in creating the named pairs
+        //  for this field due to the option IncludeFields on the write/read calls
+        //HOWEVER, the deserializer does have a problem
+        //solution: use an annotation to indicate that the field
+        //          is included for use by JSON
+        //to use this annotation, you will need to add a namespace (see above)
+        //  in resolving the conflict.
+        [JsonInclude]
         public ResidentAddress Address;
 
         //this property will compile cleanly
@@ -93,6 +106,10 @@ namespace OOPsReview.Data
         //if only a greedy constructor exists for the class, the ONLY way to possibly create an instance
         //  for the class within the program would be to use the constructor when the class instance is created
         
+        //for JSON deserialization requires proper matching constructor parameter names
+        //your constructor parameter names MUST MATCH your property variable names
+        //the parameter names are NOT case-sensitive
+        //the order of the parameters on the constructors does not affect the JSON reading (deserialization)
         public Person(string firstname, string lastname, ResidentAddress Address, List<Employment> employmentpositions)
         {
             FirstName = firstname;
