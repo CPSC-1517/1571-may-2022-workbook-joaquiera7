@@ -121,7 +121,7 @@ namespace OOPsReview.Data
             {
                 throw new ArgumentNullException($"You must supply an employment record for it to be added to this person");
             }
-
+             
             EmploymentPositions.Add(employment);
         }
     }
